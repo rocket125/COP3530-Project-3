@@ -17,6 +17,8 @@ class Maze {
     vector<string> maze;
     pair<int,int> startPos, endPos;
 
+    // Private functions
+
 public:
     Maze(); // Constructs a maze of 0 size
     // Accessors
@@ -31,6 +33,9 @@ public:
     bool setEndPosition(unsigned int x, unsigned int y);
     // Misc
     void printMaze(); // Prints maze in console
+
+    // Static member functions
+    static void loadMazeFromFile(Maze& maze,const string& path);
 };
 
 

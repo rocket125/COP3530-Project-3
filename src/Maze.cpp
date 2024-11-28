@@ -1,5 +1,6 @@
 #include "Maze.h"
 #include <iostream>
+#include <fstream>
 
 using namespace std;
 
@@ -76,3 +77,27 @@ void Maze::printMaze()
         cout << endl;
     }
 }
+
+void Maze::loadMazeFromFile(Maze &maze,const string& path)
+{
+    ifstream file;
+    file.open(path);
+    if (file.is_open())
+    {
+        string line;
+        vector<string> newMaze;
+        while (getline(file, line))
+        {
+           newMaze.push_back(line);
+        }
+        maze.setMaze(newMaze);
+
+        file.close();
+    }
+    else
+    {
+        cout << "Path is invalid" << endl;
+    }
+}
+
+
