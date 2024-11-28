@@ -1,0 +1,1 @@
+#include "catch/catch_amalgamated.hpp"
