@@ -15,12 +15,20 @@ FetchContent_Declare(SFML
         SYSTEM)
 FetchContent_MakeAvailable(SFML)
 
+Include(FetchContent)
+FetchContent_Declare(
+        Catch2
+        GIT_REPOSITORY https://github.com/catchorg/Catch2.git
+        GIT_TAG        v3.4.0 # or a later release
+)
+FetchContent_MakeAvailable(Catch2)
 
 set(CMAKE_EXE_LINKER_FLAGS "-static-libgcc -static-libstdc++")
 
 add_executable(Main src/main.cpp
         src/maze.cpp
-        src/maze.h)
+        src/maze.h
+)
 target_link_libraries(Main PUBLIC sfml-graphics sfml-window sfml-system)
 target_compile_features(Main PRIVATE cxx_std_17)
 
@@ -32,16 +40,11 @@ if(WIN32)
             VERBATIM)
 endif()
 
-Include(FetchContent)
-FetchContent_Declare(
-        Catch2
-        GIT_REPOSITORY https://github.com/catchorg/Catch2.git
-        GIT_TAG        v3.4.0 # or a later release
-)
 
-FetchContent_MakeAvailable(Catch2)
 
 add_executable(tests
         test/test.cpp
         src/maze.cpp
-        src/maze.h)
+        src/maze.h
+)
+target_link_libraries(tests PRIVATE Catch2::Catch2WithMain)
