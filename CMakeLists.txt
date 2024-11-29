@@ -28,6 +28,8 @@ set(CMAKE_EXE_LINKER_FLAGS "-static-libgcc -static-libstdc++")
 add_executable(Main src/main.cpp
         src/maze.cpp
         src/maze.h
+        src/pathFinder.cpp
+        src/pathFinder.h
 )
 target_link_libraries(Main PUBLIC sfml-graphics sfml-window sfml-system)
 target_compile_features(Main PRIVATE cxx_std_17)
@@ -46,5 +48,7 @@ add_executable(tests
         test/test.cpp
         src/maze.cpp
         src/maze.h
+        src/pathFinder.cpp
+        src/pathFinder.h
 )
 target_link_libraries(tests PRIVATE Catch2::Catch2WithMain)
