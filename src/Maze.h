@@ -36,6 +36,7 @@ public:
 
     // Static member functions
     static void loadMazeFromFile(Maze& maze,const string& path);
+    static Maze generateMaze(unsigned int width, unsigned int height); // Generates a random maze.
 };
 
 
