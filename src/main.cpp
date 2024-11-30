@@ -144,3 +144,6 @@ int main(int argc, char* argv[]) {
 
     return 0;
 }
+
+// The code tracks the option you select so far. The timer will have to update and then once code is ready
+// we can initialize the start button. But this here DOES know what example/alg option you click on so far.
