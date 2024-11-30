@@ -63,7 +63,6 @@ int main(int argc, char* argv[]) {
         sf::RectangleShape startButton(sf::Vector2f(200, 40));
         startButton.setPosition(1020, 450);
         startButton.setFillColor(sf::Color(150, 0, 0));
-
         sf::Text startButtonText = createText("Start", font, 20, 1080, 455);
 
         // Main window loop
