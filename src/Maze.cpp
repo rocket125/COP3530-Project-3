@@ -68,28 +68,6 @@ vector<pair<unsigned int, unsigned int>> Maze::getAdjacentEdges(unsigned int x, 
     return edges;
 }
 
-pair<unsigned int, unsigned int> Maze::getEdgeBetween(unsigned int x1, unsigned int y1, unsigned int x2,
-                                                      unsigned int y2)
-{
-    // x2 and y2 will always be greater.
-    unsigned int temp;
-    if (x1 > x2)
-    {
-        temp = x2;
-        x2 = x1;
-        x1 = temp;
-    }
-    if (y1 > y2)
-    {
-        temp = y2;
-        y2 = y1;
-        y1 = temp;
-    }
-
-    // Finds the edge between the two points
-
-}
-
 vector<pair<unsigned int, unsigned int>> Maze::getTilesFromEdge(unsigned int x,
     unsigned int y)
 {

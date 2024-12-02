@@ -29,7 +29,6 @@ public:
     const vector<string>& getMaze();
     vector<pair<unsigned int, unsigned int>> getAdjacentTiles(unsigned int x, unsigned int y);
     vector<pair<unsigned int, unsigned int>> getAdjacentEdges(unsigned int x, unsigned int y);
-    pair<unsigned int, unsigned int> getEdgeBetween(unsigned int x1, unsigned int y1, unsigned int x2, unsigned int y2); // Returns the position of an edge connecting two tiles.
     vector<pair<unsigned int, unsigned int>> getTilesFromEdge(unsigned int x, unsigned int y);
     vector<pair<unsigned int, unsigned int>> getTilesFromEdge(pair<unsigned int, unsigned int> edge);
     pair<int,int> getStartPosition();
