@@ -13,8 +13,8 @@ public:
 
     MazeSolver();
     virtual void solve(Maze& maze) = 0;
-    virtual vector<pair<unsigned int, unsigned int>> getPath() = 0; // Returns a vector containing the path from the start to end
-    virtual unsigned int getTime() = 0; // Returns the time taken to solve the maze
+    vector<pair<unsigned int, unsigned int>> getPath() const; // Returns a vector containing the path from the start to end
+    unsigned int getTime() const; // Returns the time taken to solve the maze
 };
 
 #endif //MAZESOLVER_H
