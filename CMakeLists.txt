@@ -43,7 +43,11 @@ if(WIN32)
             VERBATIM)
 endif()
 
-
+add_custom_command(
+        TARGET Main
+        COMMENT "Copy resources"
+        COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/resources $<TARGET_FILE_DIR:Main>
+)
 
 add_executable(tests
         test/test.cpp
