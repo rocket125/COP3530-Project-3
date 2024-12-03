@@ -188,6 +188,9 @@ void Maze::loadMazeFromFile(Maze &maze,const string& path)
         }
         maze.setMaze(newMaze);
 
+        maze.setStartPosition(0 , 0);
+        maze.setEndPosition(newMaze[0].length() - 1, newMaze.size() - 1);
+
         file.close();
     }
     else

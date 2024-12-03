@@ -16,6 +16,7 @@ TEST_CASE("Loading maze 5x5", "[nogui]")
 "###.t"};
     maze.printMaze();
     REQUIRE(actual == expected);
+    REQUIRE(maze.getMaze()[maze.getEndPosition().second][maze.getEndPosition().first] == 't');
 }
 
 TEST_CASE("Loading random", "")
