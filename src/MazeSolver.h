@@ -4,6 +4,7 @@
 #include"Maze.h"
 
 class MazeSolver {
+protected:
     unsigned int time; // Time it took to solve the maze
     vector<pair<unsigned int, unsigned int>> path; // All the tiles in the path from start to end
 
