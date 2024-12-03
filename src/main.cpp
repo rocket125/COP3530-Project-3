@@ -24,8 +24,7 @@ int main(int argc, char* argv[]) {
         sf::RenderWindow window({1280, 720}, "Project 3");
         window.setFramerateLimit(60);
 
-        // Load the font, need to put file in repository
-        // I have it I'll put it in soon
+        // Load the font, file is in resources
         sf::Font font;
         if (!font.loadFromFile("ARIAL.ttf")) {
             cout << "Failed to load font" << endl;
