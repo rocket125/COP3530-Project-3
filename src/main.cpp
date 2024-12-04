@@ -1,6 +1,7 @@
 #include <SFML/Graphics.hpp>
 #include <string>
 #include <iostream>
+#include <sstream>
 
 using namespace std;
 
@@ -24,11 +25,10 @@ int main(int argc, char* argv[]) {
         sf::RenderWindow window({1280, 720}, "Project 3");
         window.setFramerateLimit(60);
 
-        // Load the font, file is in resources
+        // Load the font, file in resources
         sf::Font font;
         if (!font.loadFromFile("ARIAL.ttf")) {
             cout << "Failed to load font" << endl;
-            // if load fails -> exit
             return -1;
         }
 
@@ -40,8 +40,17 @@ int main(int argc, char* argv[]) {
 
         // this creates the dropdown
         bool showExampleMenu = false;
-        sf::Text smallExample = createText("Small Example", font, 18, 1040, 100);
-        sf::Text largeExample = createText("Large Example", font, 18, 1040, 130);
+        sf::Text smallExample = createText("Small Example", font, 18, 1040, 120);
+        sf::Text largeExample = createText("Large Example", font, 18, 1040, 150);
+        sf::Text selectedExample = createText("None", font, 18, 1030, 90);
+
+        // Maze input size popup, bool is true if small example is clicked
+        bool showMazeSizePrompt = false;
+        sf::Text mazeSizeText = createText("Maze Size (max 50):", font, 18, 1030, 200);
+        sf::Text mazeSizeInput = createText("", font, 18, 1030, 230);
+        // this STORES the MAZE SIZE and also checks if it is >= limit
+        int mazeSize = 0;
+        bool inputValid = true;
 
         // Creates the algorithm button
         sf::RectangleShape button2(sf::Vector2f(200, 40));
@@ -50,9 +59,10 @@ int main(int argc, char* argv[]) {
         sf::Text button2Text = createText("Algorithm Type", font, 20, 1030, 205);
 
         // this drops down the options for the second button
-        bool showAlgorithmMenu = false; // Track if the dropdown is open
-        sf::Text bfsOption = createText("BFS", font, 18, 1040, 250);
-        sf::Text dfsOption = createText("DFS", font, 18, 1040, 280);
+        bool showAlgorithmMenu = false;
+        sf::Text bfsOption = createText("BFS", font, 18, 1040, 270);
+        sf::Text dfsOption = createText("DFS", font, 18, 1040, 310);
+        sf::Text selectedAlgorithm = createText("None", font, 18, 1030, 240);
 
         // Timer display
         sf::Text timerLabel = createText("Timer:", font, 20, 1020, 350);
@@ -61,10 +71,27 @@ int main(int argc, char* argv[]) {
         // Start button
         sf::RectangleShape startButton(sf::Vector2f(200, 40));
         startButton.setPosition(1020, 450);
-        startButton.setFillColor(sf::Color(150, 0, 0));
+        startButton.setFillColor(sf::Color(0, 255, 0));
         sf::Text startButtonText = createText("Start", font, 20, 1080, 455);
 
-        // Main window loop
+        // Reset button
+        sf::RectangleShape resetButton(sf::Vector2f(200, 40));
+        resetButton.setPosition(1020, 500);
+        resetButton.setFillColor(sf::Color(255, 0, 0));
+        sf::Text resetButtonText = createText("Reset", font, 20, 1080, 505);
+
+        // The box that contains the maze size prompt
+        sf::RectangleShape mazeSizeBox(sf::Vector2f(250, 100));
+        mazeSizeBox.setPosition(1020, 170);
+        mazeSizeBox.setFillColor(sf::Color(173, 216, 230));
+        mazeSizeBox.setOutlineColor(sf::Color::Black);
+        mazeSizeBox.setOutlineThickness(1);
+
+        // This tracks if the menu is active, this helps with being able to use buttons
+        bool menuActive = true;
+        // Tracks the popup, if true you can't use other buttons
+        bool mazeSizePopup = false;
+        // Main loop
         while (window.isOpen()) {
             sf::Event event;
             while (window.pollEvent(event)) {
@@ -74,49 +101,118 @@ int main(int argc, char* argv[]) {
 
                 // This is the mouse click event for the dropdown menus
                 if (event.type == sf::Event::MouseButtonPressed) {
+                    if (mazeSizePopup) {
+                        // disables button use
+                        continue;
+                    }
+
                     // Is it clicking the example button?
                     if (button1.getGlobalBounds().contains(window.mapPixelToCoords(sf::Mouse::getPosition(window)))) {
-                        showExampleMenu = !showExampleMenu; // dropdown visibility
+                        // Dropdown options visibility
+                        if (!mazeSizePopup && menuActive) {
+                            showExampleMenu = !showExampleMenu;
+                        }
                     }
-                    // Is it clicking the example button?
+                    // Is it clicking the algorithm button?
                     if (button2.getGlobalBounds().contains(window.mapPixelToCoords(sf::Mouse::getPosition(window)))) {
-                        showAlgorithmMenu = !showAlgorithmMenu;
+                        if (!mazeSizePopup && menuActive) {
+                            showAlgorithmMenu = !showAlgorithmMenu;
+                        }
                     }
 
                     // Check if an option is selected from examples
                     if (showExampleMenu) {
                         if (smallExample.getGlobalBounds().contains(window.mapPixelToCoords(sf::Mouse::getPosition(window)))) {
-                            // small Example selected
+                            selectedExample.setString("Small Example");
+                            // Closes dropdown and shows prompts when Small Example is chosen
+                            showExampleMenu = false;
+                            showMazeSizePrompt = true;
+                            mazeSizePopup = true;
                             cout << "Small Example selected" << endl;
-                            showExampleMenu = false;
                         } else if (largeExample.getGlobalBounds().contains(window.mapPixelToCoords(sf::Mouse::getPosition(window)))) {
-                            // large Example selected
-                            cout << "Large Example selected" << endl;
+                            selectedExample.setString("Large Example");
+                            // This does not show any popups but closes the dropdown
                             showExampleMenu = false;
+                            showMazeSizePrompt = false;
+                            mazeSizePopup = false;
+                            cout << "Large Example selected" << endl;
                         }
                     }
 
                     // Check if an option is selected from algorithms
                     if (showAlgorithmMenu) {
                         if (bfsOption.getGlobalBounds().contains(window.mapPixelToCoords(sf::Mouse::getPosition(window)))) {
-                            // BFS selected
+                            // Same logic of selecting an option and then closing dropdown
+                            selectedAlgorithm.setString("BFS");
+                            showAlgorithmMenu = false;
                             cout << "BFS selected" << endl;
-                            showAlgorithmMenu = false;
                         } else if (dfsOption.getGlobalBounds().contains(window.mapPixelToCoords(sf::Mouse::getPosition(window)))) {
-                            // DFS selected
-                            cout << "DFS selected" << endl;
+                            selectedAlgorithm.setString("DFS");
                             showAlgorithmMenu = false;
+                            cout << "DFS selected" << endl;
+                        }
+                    }
+
+                    // Is the Start button clicked? If so you can't interact further, besides resetting
+                    if (startButton.getGlobalBounds().contains(window.mapPixelToCoords(sf::Mouse::getPosition(window)))) {
+                        if (menuActive && !mazeSizePopup && selectedExample.getString() != "None" && selectedAlgorithm.getString() != "None") {
+                            cout << "Start button was clicked." << endl;
+                            menuActive = false;
+                        }
+                    }
+
+                    // Check if Reset button is clicked, if so reset inputs
+                    if (resetButton.getGlobalBounds().contains(window.mapPixelToCoords(sf::Mouse::getPosition(window)))) {
+                        selectedExample.setString("None");
+                        selectedAlgorithm.setString("None");
+                        showExampleMenu = false;
+                        showAlgorithmMenu = false;
+                        showMazeSizePrompt = false;
+                        mazeSizePopup = false;
+                        menuActive = true;
+                        cout << "Menu was reset" << endl;
+                    }
+                }
+
+                // This is for the size input and handles the text
+                if (event.type == sf::Event::TextEntered) {
+                    if (mazeSizePopup) {
+                        if (event.text.unicode == 8) {
+                            std::string currentText = mazeSizeInput.getString();
+                            if (!currentText.empty()) {
+                                currentText.pop_back();
+                                mazeSizeInput.setString(currentText);
+                            }
+                        } else if (event.text.unicode >= '0' && event.text.unicode <= '9') {
+                            std::string currentText = mazeSizeInput.getString();
+                            currentText += static_cast<char>(event.text.unicode);
+                            mazeSizeInput.setString(currentText);
+                        }
+                        stringstream ss(mazeSizeInput.getString());
+                        ss >> mazeSize;
+                        // this checks if the number entered was within the accepted maze range
+                        if (mazeSize <= 50 && mazeSize > 0) {
+                            inputValid = true;
+                        } else {
+                            inputValid = false;
+                        }
+                        // this is for the enter key
+                        if (event.text.unicode == 13 && inputValid) {
+                            showMazeSizePrompt = false;
+                            mazeSizePopup = false;
+                            cout << "Maze Size set to " << mazeSize << endl;
                         }
                     }
                 }
             }
 
-            // Clear window
+            // Clears the window
             window.clear(sf::Color::White);
 
-            // draw all the buttons
+            // draws all the buttons
             window.draw(button1);
             window.draw(button1Text);
+            window.draw(selectedExample);
             if (showExampleMenu) {
                 window.draw(smallExample);
                 window.draw(largeExample);
@@ -124,6 +220,7 @@ int main(int argc, char* argv[]) {
 
             window.draw(button2);
             window.draw(button2Text);
+            window.draw(selectedAlgorithm);
             if (showAlgorithmMenu) {
                 window.draw(bfsOption);
                 window.draw(dfsOption);
@@ -135,14 +232,26 @@ int main(int argc, char* argv[]) {
             window.draw(startButton);
             window.draw(startButtonText);
 
+            window.draw(resetButton);
+            window.draw(resetButtonText);
+
+            // if true, draw the maze size prompt
+            if (showMazeSizePrompt) {
+                window.draw(mazeSizeBox);
+                window.draw(mazeSizeText);
+                window.draw(mazeSizeInput);
+                if (!inputValid) {
+                    sf::Text errorText = createText("Maze Size must be <= 50", font, 18, 1030, 300);
+                    errorText.setFillColor(sf::Color::Red);
+                    window.draw(errorText);
+                }
+            }
+
             window.display();
         }
-    } else {
+    }else {
         // No GUI implementation here
     }
 
     return 0;
 }
-
-// The code tracks the option you select so far. The timer will have to update and then once code is ready
-// we can initialize the start button. But this here DOES know what example/alg option you click on so far.
