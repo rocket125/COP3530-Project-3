@@ -2,6 +2,7 @@
 #include <string>
 #include <iostream>
 #include <sstream>
+#include "Maze.h"
 
 using namespace std;
 
@@ -12,6 +13,33 @@ sf::Text createText(const std::string& content, sf::Font& font, unsigned int siz
     text.setFillColor(sf::Color::Black);
     return text;
 }
+
+void renderMaze(sf::RenderWindow& window, Maze maze, sf::Vector2f startPos) {
+    auto mazeData = maze.getMaze();
+    float tileSize = 20;
+    // Scales down for size 49 maze
+    if (mazeData.size() == 49 && mazeData[0].size() == 49) {
+        tileSize = 12;
+    }
+    for (size_t y = 0; y < mazeData.size(); ++y) {
+        for (size_t x = 0; x < mazeData[y].size(); ++x) {
+            sf::RectangleShape tile(sf::Vector2f(tileSize, tileSize));
+            tile.setPosition(startPos.x + x * tileSize, startPos.y + y * tileSize);
+
+            char tileChar = maze.getTile({x, y});
+            switch (tileChar) {
+                case '.': tile.setFillColor(sf::Color::White); break;
+                case '#': tile.setFillColor(sf::Color::Black); break;
+                case 's': tile.setFillColor(sf::Color::Green); break;
+                case 't': tile.setFillColor(sf::Color::Red); break;
+                default: tile.setFillColor(sf::Color::Transparent); break;
+            }
+            window.draw(tile);
+        }
+    }
+}
+
+
 
 int main(int argc, char* argv[]) {
     bool noGUI = false; // Check for "-nogui" argument
@@ -46,11 +74,20 @@ int main(int argc, char* argv[]) {
 
         // Maze input size popup, bool is true if small example is clicked
         bool showMazeSizePrompt = false;
-        sf::Text mazeSizeText = createText("Maze Size (max 50):", font, 18, 1030, 200);
-        sf::Text mazeSizeInput = createText("", font, 18, 1030, 230);
-        // this STORES the MAZE SIZE and also checks if it is >= limit
-        int mazeSize = 0;
-        bool inputValid = true;
+        sf::RectangleShape mazeSizeMenuBackdrop(sf::Vector2f(150, 120));
+        mazeSizeMenuBackdrop.setPosition(1030, 110);
+        mazeSizeMenuBackdrop.setFillColor(sf::Color(173, 216, 230));
+        mazeSizeMenuBackdrop.setOutlineColor(sf::Color::Black);
+        mazeSizeMenuBackdrop.setOutlineThickness(1);
+
+        // Maze size options text
+        sf::Text mazeOption5 = createText("5x5", font, 18, 1040, 120);
+        sf::Text mazeOption11 = createText("11x11", font, 18, 1040, 150);
+        sf::Text mazeOption25 = createText("25x25", font, 18, 1040, 180);
+        sf::Text mazeOption49 = createText("49x49", font, 18, 1040, 210);
+        Maze maze;
+        bool mazeLoaded = false;
+        sf::Vector2f mazeStartPosition(50, 50);
 
         // Creates the algorithm button
         sf::RectangleShape button2(sf::Vector2f(200, 40));
@@ -102,6 +139,51 @@ int main(int argc, char* argv[]) {
                 // This is the mouse click event for the dropdown menus
                 if (event.type == sf::Event::MouseButtonPressed) {
                     if (mazeSizePopup) {
+                        if (mazeOption5.getGlobalBounds().contains(window.mapPixelToCoords(sf::Mouse::getPosition(window)))) {
+                            cout << "5x5 option clicked" << endl;  // Debugging line
+                            Maze::loadMazeFromFile(maze, "resources/mazes/5x5.txt");
+                            if (!maze.getMaze().empty()) {
+                                mazeLoaded = true;
+                                showMazeSizePrompt = false;
+                                mazeSizePopup = false;
+                                cout << "5x5 Maze loaded successfully" << endl;
+                            } else {
+                                cout << "Failed to load 5x5 Maze" << endl;
+                            }
+                        } else if (mazeOption11.getGlobalBounds().contains(window.mapPixelToCoords(sf::Mouse::getPosition(window)))) {
+                            cout << "11x11 option clicked" << endl;  // Debugging line
+                            Maze::loadMazeFromFile(maze, "resources/mazes/11x11.txt");
+                            if (!maze.getMaze().empty()) {
+                                mazeLoaded = true;
+                                showMazeSizePrompt = false;
+                                mazeSizePopup = false;
+                                cout << "11x11 Maze loaded successfully" << endl;
+                            } else {
+                                cout << "Failed to load 11x11 Maze" << endl;
+                            }
+                        } else if (mazeOption25.getGlobalBounds().contains(window.mapPixelToCoords(sf::Mouse::getPosition(window)))) {
+                            cout << "25x25 option clicked" << endl;  // Debugging line
+                            Maze::loadMazeFromFile(maze, "resources/mazes/25x25.txt");
+                            if (!maze.getMaze().empty()) {
+                                mazeLoaded = true;
+                                showMazeSizePrompt = false;
+                                mazeSizePopup = false;
+                                cout << "25x25 Maze loaded successfully" << endl;
+                            } else {
+                                cout << "Failed to load 25x25 Maze" << endl;
+                            }
+                        } else if (mazeOption49.getGlobalBounds().contains(window.mapPixelToCoords(sf::Mouse::getPosition(window)))) {
+                            cout << "49x49 option clicked" << endl;
+                            Maze::loadMazeFromFile(maze, "resources/mazes/49x49.txt");
+                            if (!maze.getMaze().empty()) {
+                                mazeLoaded = true;
+                                showMazeSizePrompt = false;
+                                mazeSizePopup = false;
+                                cout << "49x49 Maze loaded successfully" << endl;
+                            } else {
+                                cout << "Failed to load 49x49 Maze" << endl;
+                            }
+                        }
                         // disables button use
                         continue;
                     }
@@ -131,10 +213,12 @@ int main(int argc, char* argv[]) {
                             cout << "Small Example selected" << endl;
                         } else if (largeExample.getGlobalBounds().contains(window.mapPixelToCoords(sf::Mouse::getPosition(window)))) {
                             selectedExample.setString("Large Example");
-                            // This does not show any popups but closes the dropdown
+                            // This does not show any popups but closes the dropdown and possible maze
                             showExampleMenu = false;
                             showMazeSizePrompt = false;
                             mazeSizePopup = false;
+                            mazeLoaded = false;
+                            maze = Maze();
                             cout << "Large Example selected" << endl;
                         }
                     }
@@ -170,40 +254,16 @@ int main(int argc, char* argv[]) {
                         showMazeSizePrompt = false;
                         mazeSizePopup = false;
                         menuActive = true;
+                        mazeLoaded = false;
+                        maze = Maze();
                         cout << "Menu was reset" << endl;
                     }
+
+
+
                 }
 
-                // This is for the size input and handles the text
-                if (event.type == sf::Event::TextEntered) {
-                    if (mazeSizePopup) {
-                        if (event.text.unicode == 8) {
-                            std::string currentText = mazeSizeInput.getString();
-                            if (!currentText.empty()) {
-                                currentText.pop_back();
-                                mazeSizeInput.setString(currentText);
-                            }
-                        } else if (event.text.unicode >= '0' && event.text.unicode <= '9') {
-                            std::string currentText = mazeSizeInput.getString();
-                            currentText += static_cast<char>(event.text.unicode);
-                            mazeSizeInput.setString(currentText);
-                        }
-                        stringstream ss(mazeSizeInput.getString());
-                        ss >> mazeSize;
-                        // this checks if the number entered was within the accepted maze range
-                        if (mazeSize <= 50 && mazeSize > 0) {
-                            inputValid = true;
-                        } else {
-                            inputValid = false;
-                        }
-                        // this is for the enter key
-                        if (event.text.unicode == 13 && inputValid) {
-                            showMazeSizePrompt = false;
-                            mazeSizePopup = false;
-                            cout << "Maze Size set to " << mazeSize << endl;
-                        }
-                    }
-                }
+
             }
 
             // Clears the window
@@ -237,15 +297,17 @@ int main(int argc, char* argv[]) {
 
             // if true, draw the maze size prompt
             if (showMazeSizePrompt) {
-                window.draw(mazeSizeBox);
-                window.draw(mazeSizeText);
-                window.draw(mazeSizeInput);
-                if (!inputValid) {
-                    sf::Text errorText = createText("Maze Size must be <= 50", font, 18, 1030, 300);
-                    errorText.setFillColor(sf::Color::Red);
-                    window.draw(errorText);
-                }
+                window.draw(mazeSizeMenuBackdrop);
+                window.draw(mazeOption5);
+                window.draw(mazeOption11);
+                window.draw(mazeOption25);
+                window.draw(mazeOption49);
             }
+
+            if (mazeLoaded) {
+                renderMaze(window, maze, mazeStartPosition);
+            }
+
 
             window.display();
         }
