@@ -3,7 +3,7 @@
 MazeSolver::MazeSolver()
 {
     path = vector<pair<unsigned int, unsigned int>>();
-    time = 0;
+    timeElapsed = 0;
 }
 
 vector<pair<unsigned int, unsigned int>> MazeSolver::getPath() const
@@ -11,7 +11,7 @@ vector<pair<unsigned int, unsigned int>> MazeSolver::getPath() const
     return path;
 }
 
-unsigned int MazeSolver::getTime() const
+double MazeSolver::getTime() const
 {
-    return time;
+    return timeElapsed;
 }
