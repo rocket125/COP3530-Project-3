@@ -17,6 +17,7 @@ public:
     ~BFS() override;
     void solve(Maze& maze) override;
     vector<pair<unsigned int, unsigned int>> getPath() const;
+    double getTime() const;
 };
 
 #endif //BFS_H
