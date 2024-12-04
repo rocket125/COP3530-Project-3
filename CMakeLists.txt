@@ -31,6 +31,8 @@ add_executable(Main
         src/maze.h
         src/MazeSolver.h
         src/MazeSolver.cpp
+        src/DFS.cpp
+        src/DFS.h
 )
 target_link_libraries(Main PRIVATE sfml-graphics sfml-window sfml-system)
 target_compile_features(Main PRIVATE cxx_std_17)
@@ -53,6 +55,10 @@ add_executable(tests
         test/test.cpp
         src/maze.cpp
         src/maze.h
+        src/MazeSolver.h
+        src/MazeSolver.cpp
+        src/DFS.cpp
+        src/DFS.h
 )
 target_link_libraries(tests PRIVATE Catch2::Catch2WithMain)
 
