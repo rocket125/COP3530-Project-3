@@ -46,7 +46,7 @@ endif()
 add_custom_command(
         TARGET Main
         COMMENT "Copy resources"
-        COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/resources $<TARGET_FILE_DIR:Main>
+        COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/resources $<TARGET_FILE_DIR:Main>/resources
 )
 
 add_executable(tests
@@ -55,3 +55,9 @@ add_executable(tests
         src/maze.h
 )
 target_link_libraries(tests PRIVATE Catch2::Catch2WithMain)
+
+add_custom_command(
+        TARGET tests
+        COMMENT "Copy resources"
+        COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/resources $<TARGET_FILE_DIR:Main>/resources
+)
