@@ -109,7 +109,7 @@ vector<pair<unsigned int, unsigned int>> BFS::getPath() const
     return path;
 }
 
-double DFS::getTime() const
+double BFS::getTime() const
 {
     return timeElapsed;
 }
