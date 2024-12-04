@@ -38,7 +38,7 @@ const vector<string>& Maze::getMaze()
     return maze;
 }
 
-vector<pair<unsigned int, unsigned int>> Maze::getAdjacentTiles(unsigned int x, unsigned int y)
+vector<pair<unsigned int, unsigned int>> Maze::getAdjacentGapTiles(unsigned int x, unsigned int y)
 {
     vector<pair<unsigned int, unsigned int>> tiles;
     if (isValidTile(x + 0, y - 2)) // Up
@@ -53,9 +53,9 @@ vector<pair<unsigned int, unsigned int>> Maze::getAdjacentTiles(unsigned int x, 
     return tiles;
 }
 
-vector<pair<unsigned int, unsigned int>> Maze::getAdjacentTiles(pair<unsigned int, unsigned int> tile)
+vector<pair<unsigned int, unsigned int>> Maze::getAdjacentGapTiles(pair<unsigned int, unsigned int> position)
 {
-    return getAdjacentTiles(tile.first, tile.second);
+    return getAdjacentGapTiles(position.first, position.second);
 }
 
 vector<pair<unsigned int, unsigned int>> Maze::getAdjacentEdges(unsigned int x, unsigned int y)

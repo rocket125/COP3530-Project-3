@@ -19,7 +19,12 @@ class Maze {
     pair<int,int> startPos, endPos;
 
     // Private methods
-
+    // Maze generation methods
+    vector<pair<unsigned int, unsigned int>> getAdjacentGapTiles(unsigned int x, unsigned int y); // Returns tiles 2 tiles away in cardinal directions from position
+    vector<pair<unsigned int, unsigned int>> getAdjacentGapTiles(pair<unsigned int, unsigned int> position); // Returns tiles 2 tiles away in cardinal directions from position
+    vector<pair<unsigned int, unsigned int>> getAdjacentEdges(unsigned int x, unsigned int y); // Returns the connected edges of the current position
+    vector<pair<unsigned int, unsigned int>> getTilesFromEdge(unsigned int x, unsigned int y); // Returns a vector of two tiles touching this edge.
+    vector<pair<unsigned int, unsigned int>> getTilesFromEdge(pair<unsigned int, unsigned int> edge); // Returns a vector of two tiles touching this edge.
     // Private static methods
     static void markEdges(pair<unsigned int, unsigned int>& tile, set<pair<unsigned int, unsigned int>>& inSet, set<pair<unsigned int, unsigned int>>& neighbors, Maze m); // Removes tile from neighbor set and places it in inSet. Its neighbors is placed in the neighbors set.
 
