@@ -20,6 +20,9 @@ stack<pair<unsigned int, unsigned int>> DFS::search(stack<pair<unsigned int, uns
     vector<pair<unsigned int, unsigned int>> adj = maze.getAdjacentEmptyTiles(tile);
     // Perform search on each tile
 
+    // Temp return for building purposes
+    return stack<pair<unsigned int, unsigned int>>();
+
 }
 
 pair<unsigned int, unsigned int> DFS::nextPosition(pair<unsigned int, unsigned int> currentTile, Maze &m)

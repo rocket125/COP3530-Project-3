@@ -33,6 +33,9 @@ add_executable(Main
         src/MazeSolver.cpp
         src/DFS.cpp
         src/DFS.h
+        src/BFS.cpp
+        src/BFS.h
+        src/main.cpp
 )
 target_link_libraries(Main PRIVATE sfml-graphics sfml-window sfml-system)
 target_compile_features(Main PRIVATE cxx_std_17)
