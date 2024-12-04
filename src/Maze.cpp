@@ -101,7 +101,7 @@ vector<pair<unsigned int, unsigned int>> Maze::getTilesFromEdge(
     return getTilesFromEdge(edge.first, edge.second);
 }
 
-pair<int, int> Maze::getStartPosition()
+pair<unsigned int,unsigned int> Maze::getStartPosition()
 {
     return startPos;
 }
