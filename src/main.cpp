@@ -131,6 +131,11 @@ int main(int argc, char* argv[]) {
         mazeSizeBox.setOutlineColor(sf::Color::Black);
         mazeSizeBox.setOutlineThickness(1);
 
+        // For large maze option
+        sf::Text successMessage = createText("Successfully Compiled.", font, 40, 100, 300);
+        successMessage.setFillColor(sf::Color(0, 100, 0));
+
+
         // This tracks if the menu is active, this helps with being able to use buttons
         bool menuActive = true;
         // Tracks the popup, if true you can't use other buttons
@@ -226,6 +231,7 @@ int main(int argc, char* argv[]) {
                             mazeSizePopup = false;
                             mazeLoaded = false;
                             maze = Maze();
+                            Maze::loadMazeFromFile(maze, "resources/mazes/401x401.txt");
                             cout << "Large Example selected" << endl;
                         }
                     }
@@ -333,7 +339,7 @@ int main(int argc, char* argv[]) {
             }
 
             // Draws path
-            if (mazeSolved) {
+            if (mazeSolved && selectedExample.getString() == "Small Example") {
                 float tileSize = (maze.getMaze().size() == 49) ? 12 : 20;
                 sf::VertexArray pathLine(sf::LinesStrip);
 
@@ -346,6 +352,12 @@ int main(int argc, char* argv[]) {
                 }
                 window.draw(pathLine);
             }
+
+            if (mazeSolved && selectedExample.getString() == "Large Example") {
+                // this draws a success message
+                window.draw(successMessage);
+            }
+
 
             if (mazeSolved) {
                 std::stringstream timerStream;
