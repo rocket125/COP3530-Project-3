@@ -53,6 +53,11 @@ vector<pair<unsigned int, unsigned int>> Maze::getAdjacentTiles(unsigned int x, 
     return tiles;
 }
 
+vector<pair<unsigned int, unsigned int>> Maze::getAdjacentTiles(pair<unsigned int, unsigned int> tile)
+{
+    return getAdjacentTiles(tile.first, tile.second);
+}
+
 vector<pair<unsigned int, unsigned int>> Maze::getAdjacentEdges(unsigned int x, unsigned int y)
 {
     vector<pair<unsigned int, unsigned int>> edges;

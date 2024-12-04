@@ -28,6 +28,7 @@ public:
     // Accessors
     const vector<string>& getMaze();
     vector<pair<unsigned int, unsigned int>> getAdjacentTiles(unsigned int x, unsigned int y);
+    vector<pair<unsigned int, unsigned int>> getAdjacentTiles(pair<unsigned int, unsigned int> tile);
     vector<pair<unsigned int, unsigned int>> getAdjacentEdges(unsigned int x, unsigned int y);
     vector<pair<unsigned int, unsigned int>> getTilesFromEdge(unsigned int x, unsigned int y);
     vector<pair<unsigned int, unsigned int>> getTilesFromEdge(pair<unsigned int, unsigned int> edge);
