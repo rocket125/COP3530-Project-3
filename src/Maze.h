@@ -41,26 +41,26 @@ class Maze {
 public:
     Maze(); // Constructs a maze of 0 size
     // Accessors
-    const vector<string>& getMaze();
-    const char getTile(pair<unsigned int, unsigned int> position) const; // Returns the char of the tile in this position
-    vector<pair<unsigned int, unsigned int>> getAdjacentTiles(pair<unsigned int, unsigned int> position); // Returns the adjacent tiles from position
-    vector<pair<unsigned int, unsigned int>> getAdjacentEmptyTiles(pair<unsigned int, unsigned int> position); // Return adjacent empty tiles from position
-    pair<unsigned int, unsigned int> getStartPosition();
-    pair<unsigned int, unsigned int> getEndPosition();
-    bool isValidTile(int x, int y); // Returns true if the tile is within the maze's bounds
-    bool isValidTile(pair<int, int> tile); // Returns true if the tile is within the maze's bounds
+    const vector<string>& getMaze(); // Returns a vector<string> reference of the Maze. O(1)
+    const char getTile(pair<unsigned int, unsigned int> position) const; // Returns the char of the tile in this position. O(1)
+    vector<pair<unsigned int, unsigned int>> getAdjacentTiles(pair<unsigned int, unsigned int> position); // Returns the adjacent tiles from position. O(1): only checks the surrounding tiles
+    vector<pair<unsigned int, unsigned int>> getAdjacentEmptyTiles(pair<unsigned int, unsigned int> position); // Return adjacent empty tiles from position O(1): calls getAdjacentTiles()
+    pair<unsigned int, unsigned int> getStartPosition(); // O(1)
+    pair<unsigned int, unsigned int> getEndPosition(); // O(1)
+    bool isValidTile(int x, int y); // Returns true if the tile is within the maze's bounds. O(1)
+    bool isValidTile(pair<int, int> tile); // Returns true if the tile is within the maze's bounds. O(1)
     // Mutators
-    void setMaze(const vector<string>& maze); // Replaces maze with a new vector<string> maze
-    bool setTile(unsigned int x, unsigned int y, char t); // Replaces a tile within the maze. Returns false if the tile does not exist
-    bool setTile(pair<unsigned int, unsigned int>& position, char t); // Replaces a tile within the maze. Returns false if the tile does not exist
-    bool setStartPosition(unsigned int x, unsigned int y);
-    bool setEndPosition(unsigned int x, unsigned int y);
+    void setMaze(const vector<string>& maze); // Replaces maze with a new vector<string> maze. O(n) where n is total tiles in the new maze
+    bool setTile(unsigned int x, unsigned int y, char t); // Replaces a tile within the maze. Returns false if the tile does not exist. O(n) where n is all the tiles in the row with the targeted tile
+    bool setTile(pair<unsigned int, unsigned int>& position, char t); // Replaces a tile within the maze. Returns false if the tile does not exist. O(n): calls setTile(unsigned int x, unsigned int y, char t)
+    bool setStartPosition(unsigned int x, unsigned int y); // O(1)
+    bool setEndPosition(unsigned int x, unsigned int y); // O(1)
     // Misc
-    void printMaze(); // Prints maze in console
+    void printMaze(); // Prints maze in console. O(n) where n is all the tiles in the maze.
 
     // Static member functions
-    static void loadMazeFromFile(Maze& maze,const string& path);
-    static Maze generateMaze(unsigned int width, unsigned int height); // Generates a random maze.
+    static void loadMazeFromFile(Maze& maze,const string& path); // O(n) where n is all the tiles in the maze
+    static Maze generateMaze(unsigned int width, unsigned int height); // Generates a random maze using Prim's algorithm
 };
 
 #endif //MAZE_H
