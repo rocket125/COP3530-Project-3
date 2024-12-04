@@ -3,8 +3,11 @@
 #include <iostream>
 #include <sstream>
 #include "Maze.h"
+#include "DFS.h"
+#include "BFS.h"
 
 using namespace std;
+
 
 // Helper function to create text
 sf::Text createText(const std::string& content, sf::Font& font, unsigned int size, float x, float y) {
@@ -88,6 +91,9 @@ int main(int argc, char* argv[]) {
         Maze maze;
         bool mazeLoaded = false;
         sf::Vector2f mazeStartPosition(50, 50);
+        bool mazeSolved = false;
+        std::vector<std::pair<unsigned int, unsigned int>> solutionPath;
+        double solutionTime = 0.0;
 
         // Creates the algorithm button
         sf::RectangleShape button2(sf::Vector2f(200, 40));
@@ -103,7 +109,8 @@ int main(int argc, char* argv[]) {
 
         // Timer display
         sf::Text timerLabel = createText("Timer:", font, 20, 1020, 350);
-        sf::Text timerValue = createText("0.000s", font, 20, 1080, 350);
+        sf::Text timerValue = createText("0.000ms", font, 20, 1080, 350);
+
 
         // Start button
         sf::RectangleShape startButton(sf::Vector2f(200, 40));
@@ -241,9 +248,22 @@ int main(int argc, char* argv[]) {
                     if (startButton.getGlobalBounds().contains(window.mapPixelToCoords(sf::Mouse::getPosition(window)))) {
                         if (menuActive && !mazeSizePopup && selectedExample.getString() != "None" && selectedAlgorithm.getString() != "None") {
                             cout << "Start button was clicked." << endl;
+                            if (selectedAlgorithm.getString() == "DFS") {
+                                DFS solution = DFS();
+                                solution.solve(maze);
+                                solutionPath = solution.getPath();
+                                solutionTime = solution.getTime();
+                            } else if (selectedAlgorithm.getString() == "BFS") {
+                                BFS solution = BFS();
+                                solution.solve(maze);
+                                solutionPath = solution.getPath();
+                                solutionTime = solution.getTime();
+                            }
+                            mazeSolved = true;
                             menuActive = false;
                         }
                     }
+
 
                     // Check if Reset button is clicked, if so reset inputs
                     if (resetButton.getGlobalBounds().contains(window.mapPixelToCoords(sf::Mouse::getPosition(window)))) {
@@ -256,6 +276,10 @@ int main(int argc, char* argv[]) {
                         menuActive = true;
                         mazeLoaded = false;
                         maze = Maze();
+                        mazeSolved = false;
+                        solutionPath.clear();
+                        solutionTime = 0.0;
+                        timerValue.setString("0.000ms");
                         cout << "Menu was reset" << endl;
                     }
 
@@ -308,6 +332,27 @@ int main(int argc, char* argv[]) {
                 renderMaze(window, maze, mazeStartPosition);
             }
 
+            // Draws path
+            if (mazeSolved) {
+                float tileSize = (maze.getMaze().size() == 49) ? 12 : 20;
+                sf::VertexArray pathLine(sf::LinesStrip);
+
+                for (const auto& position : solutionPath) {
+                    sf::Vertex point;
+                    point.position = sf::Vector2f(mazeStartPosition.x + position.first * tileSize + tileSize / 2,
+                                                  mazeStartPosition.y + position.second * tileSize + tileSize / 2);
+                    point.color = sf::Color::Blue;
+                    pathLine.append(point);
+                }
+                window.draw(pathLine);
+            }
+
+            if (mazeSolved) {
+                std::stringstream timerStream;
+                timerStream << solutionTime << " ms";
+                timerValue.setString(timerStream.str());
+                window.draw(timerValue);
+            }
 
             window.display();
         }
