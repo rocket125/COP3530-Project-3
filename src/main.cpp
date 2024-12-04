@@ -27,7 +27,7 @@ int main(int argc, char* argv[]) {
 
         // Load the font, file in resources
         sf::Font font;
-        if (!font.loadFromFile("ARIAL.ttf")) {
+        if (!font.loadFromFile("resources/ARIAL.ttf")) {
             cout << "Failed to load font" << endl;
             return -1;
         }
