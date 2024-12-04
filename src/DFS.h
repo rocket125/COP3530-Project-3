@@ -20,6 +20,7 @@ public:
     ~DFS() override;
     void solve(Maze& maze) override; // Solves a maze using Depth-first search algorithm.
     vector<pair<unsigned int, unsigned int>> getPath() const;
+    double getTime() const;
 };
 
 

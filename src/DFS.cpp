@@ -98,11 +98,16 @@ void DFS::solve(Maze &maze)
         p.pop();
     }
 
-    chrono::duration<double> elapsed = chrono::high_resolution_clock::now() - t;
+    chrono::duration<double, std::milli> elapsed = chrono::high_resolution_clock::now() - t;
     timeElapsed = elapsed.count();
 }
 
 vector<pair<unsigned int, unsigned int>> DFS::getPath() const
 {
     return path;
+}
+
+double DFS::getTime() const
+{
+    return timeElapsed;
 }
