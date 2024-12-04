@@ -106,7 +106,7 @@ pair<int, int> Maze::getStartPosition()
     return startPos;
 }
 
-pair<int, int> Maze::getEndPosition()
+pair<unsigned int,unsigned int> Maze::getEndPosition()
 {
     return endPos;
 }
