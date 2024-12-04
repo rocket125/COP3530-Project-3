@@ -21,7 +21,7 @@ TEST_CASE("Loading maze 5x5", "[nogui]")
     REQUIRE(maze.getTile(maze.getEndPosition()) == 't');
 }
 
-TEST_CASE("Loading random", "")
+TEST_CASE("Generate random", "[generate]")
 {
     srand(123123143);
     Maze maze = Maze::generateMaze(5, 5);
@@ -95,4 +95,23 @@ TEST_CASE("5x5 DFS Solve", "[nogui][solve]")
 "#+++#",
 "###++"};
     REQUIRE(actual == expected);
+}
+
+TEST_CASE("401x401 DFS Solve", "[nogui][solve]")
+{
+    Maze maze;
+    Maze::loadMazeFromFile(maze, "resources/mazes/401x401.txt");
+
+    DFS sol = DFS();
+    sol.solve(maze);
+    vector<pair<unsigned int, unsigned int>> path = sol.getPath();
+
+    vector<string> actual = maze.getMaze();
+    for (auto it : path)
+    {
+        maze.setTile(it, '+');
+    }
+    maze.printMaze();
+
+    cout << sol.getTime() <<  "ms" << endl;
 }
