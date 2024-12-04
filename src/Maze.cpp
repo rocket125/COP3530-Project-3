@@ -38,6 +38,42 @@ const vector<string>& Maze::getMaze()
     return maze;
 }
 
+const char Maze::getTile(pair<unsigned int, unsigned int> position) const
+{
+    return maze[position.second][position.first];
+}
+
+vector<pair<unsigned int, unsigned int>> Maze::getAdjacentTiles(pair<unsigned int, unsigned int> position)
+{
+    unsigned int x = position.first, y = position.second;
+    vector<pair<unsigned int, unsigned int>> tiles;
+    if (isValidTile(x + 0, y - 1)) // Up
+        tiles.push_back(make_pair(x, y - 1));
+    if (isValidTile(x + 1, y + 0)) // Right
+        tiles.push_back(make_pair(x + 1, y + 0));
+    if (isValidTile(x + 0, y + 1)) // Down
+        tiles.push_back(make_pair(x + 0, y + 1));
+    if (isValidTile(x - 1, y + 0)) // Left
+        tiles.push_back(make_pair(x - 1, y + 0));
+
+    return tiles;
+}
+
+vector<pair<unsigned int, unsigned int>> Maze::getAdjacentEmptyTiles(pair<unsigned int, unsigned int> position)
+{
+    vector<pair<unsigned int, unsigned int>> adj = getAdjacentTiles(position);
+    vector<pair<unsigned int, unsigned int>> empties;
+    // Adds tile to new vector if it does not contain a wall
+    for (auto it : adj)
+    {
+        if (getTile(it) != '#')
+        {
+            empties.push_back(it);
+        }
+    }
+    return empties;
+}
+
 vector<pair<unsigned int, unsigned int>> Maze::getAdjacentGapTiles(unsigned int x, unsigned int y)
 {
     vector<pair<unsigned int, unsigned int>> tiles;
@@ -132,7 +168,7 @@ bool Maze::setTile(unsigned int x, unsigned int y, char t)
 {
     if (isValidTile(x, y))
     {
-        string line = maze[y];
+        string& line = maze[y];
         string newLine = line.substr(0, x) + t + line.substr(x + 1, line.length());
         maze[y] = newLine;
         return true;

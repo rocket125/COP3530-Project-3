@@ -16,7 +16,7 @@ class Maze {
      */
 
     vector<string> maze;
-    pair<int,int> startPos, endPos;
+    pair<unsigned int,unsigned int> startPos, endPos;
 
     // Private methods
     // Maze generation methods
@@ -32,13 +32,11 @@ public:
     Maze(); // Constructs a maze of 0 size
     // Accessors
     const vector<string>& getMaze();
-    vector<pair<unsigned int, unsigned int>> getAdjacentTiles(unsigned int x, unsigned int y);
-    vector<pair<unsigned int, unsigned int>> getAdjacentTiles(pair<unsigned int, unsigned int> tile);
-    vector<pair<unsigned int, unsigned int>> getAdjacentEdges(unsigned int x, unsigned int y);
-    vector<pair<unsigned int, unsigned int>> getTilesFromEdge(unsigned int x, unsigned int y);
-    vector<pair<unsigned int, unsigned int>> getTilesFromEdge(pair<unsigned int, unsigned int> edge);
-    pair<int,int> getStartPosition();
-    pair<int,int> getEndPosition();
+    const char getTile(pair<unsigned int, unsigned int> position) const; // Returns the char of the tile in this position
+    vector<pair<unsigned int, unsigned int>> getAdjacentTiles(pair<unsigned int, unsigned int> position); // Returns the adjacent tiles from position
+    vector<pair<unsigned int, unsigned int>> getAdjacentEmptyTiles(pair<unsigned int, unsigned int> position); // Return adjacent empty tiles from position
+    pair<unsigned int, unsigned int> getStartPosition();
+    pair<unsigned int, unsigned int> getEndPosition();
     bool isValidTile(int x, int y); // Returns true if the tile is within the maze's bounds
     bool isValidTile(pair<int, int> tile); // Returns true if the tile is within the maze's bounds
     // Mutators
