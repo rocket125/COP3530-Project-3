@@ -62,6 +62,8 @@ add_executable(tests
         src/MazeSolver.cpp
         src/DFS.cpp
         src/DFS.h
+        src/BFS.cpp
+        src/BFS.h
 )
 target_link_libraries(tests PRIVATE Catch2::Catch2WithMain)
 

@@ -1,6 +1,7 @@
 #include "catch/catch_amalgamated.hpp"
 #include "../src/Maze.h"
 #include "../src/DFS.h"
+#include "../src/BFS.h"
 #include <iostream>
 
 using namespace std;
@@ -28,7 +29,7 @@ TEST_CASE("Generate random", "[generate]")
     maze.printMaze();
 }
 
-TEST_CASE("2x2 DFS Solve", "[nogui][solve]")
+TEST_CASE("2x2 DFS Solve", "[nogui][solve][DFS]")
 {
     Maze maze;
     Maze::loadMazeFromFile(maze, "resources/mazes/2x2.txt");
@@ -61,7 +62,7 @@ TEST_CASE("2x2 DFS Solve", "[nogui][solve]")
     REQUIRE(actual == expected);
 }
 
-TEST_CASE("5x5 DFS Solve", "[nogui][solve]")
+TEST_CASE("5x5 DFS Solve", "[nogui][solve][DFS]")
 {
     Maze maze;
     Maze::loadMazeFromFile(maze, "resources/mazes/5x5.txt");
@@ -97,7 +98,7 @@ TEST_CASE("5x5 DFS Solve", "[nogui][solve]")
     REQUIRE(actual == expected);
 }
 
-TEST_CASE("401x401 DFS Solve", "[nogui][solve]")
+TEST_CASE("401x401 DFS Solve", "[nogui][solve][DFS]")
 {
     Maze maze;
     Maze::loadMazeFromFile(maze, "resources/mazes/401x401.txt");
@@ -114,4 +115,73 @@ TEST_CASE("401x401 DFS Solve", "[nogui][solve]")
     maze.printMaze();
 
     cout << sol.getTime() <<  "ms" << endl;
+}
+
+TEST_CASE("2x2 BFS Solve", "[nogui][solve][BFS]")
+{
+    Maze maze;
+    Maze::loadMazeFromFile(maze, "resources/mazes/2x2.txt");
+
+    BFS sol = BFS();
+    sol.solve(maze);
+    vector<pair<unsigned int, unsigned int>> path = sol.getPath();
+
+    /*
+    // Prints out path
+    for (auto it : path)
+    {
+        cout << "(" << it.first << ", " << it.second << ")" << endl;
+    }
+    cout << endl;
+    */
+
+    vector<string> actual = maze.getMaze();
+    for (auto it : path)
+    {
+        unsigned int x = it.first, y = it.second;
+        string& line = actual[y];
+        string newLine = line.substr(0, x) + '+' + line.substr(x + 1, line.length());
+        actual[y] = newLine;
+    }
+
+    vector<string> expected =
+    {"+#",
+     "++"};
+    REQUIRE(actual == expected);
+}
+
+TEST_CASE("5x5 BFS Solve", "[nogui][solve][BFS]")
+{
+    Maze maze;
+    Maze::loadMazeFromFile(maze, "resources/mazes/5x5.txt");
+
+    BFS sol = BFS();
+    sol.solve(maze);
+    vector<pair<unsigned int, unsigned int>> path = sol.getPath();
+
+    /*
+    // Prints out path
+    for (auto it : path)
+    {
+        cout << "(" << it.first << ", " << it.second << ")" << endl;
+    }
+    cout << endl;
+    */
+
+    vector<string> actual = maze.getMaze();
+    for (auto it : path)
+    {
+        unsigned int x = it.first, y = it.second;
+        string& line = actual[y];
+        string newLine = line.substr(0, x) + '+' + line.substr(x + 1, line.length());
+        actual[y] = newLine;
+    }
+
+    vector<string> expected =
+    {"++###",
+"#+...",
+".+###",
+"#+++#",
+"###++"};
+    REQUIRE(actual == expected);
 }
