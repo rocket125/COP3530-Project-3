@@ -5,26 +5,6 @@
 
 using namespace std;
 
-stack<pair<unsigned int, unsigned int>> DFS::search(stack<pair<unsigned int, unsigned int> > &path, Maze &maze,
-                                                    set<pair<unsigned int, unsigned int> > &visited)
-{
-    pair<unsigned int, unsigned int> tile = path.top();
-    // Base case: if the current tile is the end
-    if (tile == maze.getEndPosition())
-    {
-
-    }
-    // Searches every direction
-    // If the tile was already searched, then skip
-
-    vector<pair<unsigned int, unsigned int>> adj = maze.getAdjacentEmptyTiles(tile);
-    // Perform search on each tile
-
-    // Temp return for building purposes
-    return stack<pair<unsigned int, unsigned int>>();
-
-}
-
 pair<unsigned int, unsigned int> DFS::nextPosition(pair<unsigned int, unsigned int> currentTile, Maze &m)
 {
     vector<pair<unsigned int, unsigned int>> adj = m.getAdjacentEmptyTiles(currentTile);

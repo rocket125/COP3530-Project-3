@@ -10,8 +10,6 @@ class DFS : MazeSolver
     set<pair<unsigned int, unsigned int>> visited;
 
     // Private methods
-    stack<pair<unsigned int, unsigned int>> search(stack<pair<unsigned int, unsigned int> > &path, Maze &maze,
-                                                   set<pair<unsigned int, unsigned int> > &visited); // Recursive method
     pair<unsigned int, unsigned int> nextPosition(pair<unsigned int, unsigned int> currentTile, Maze& m);
     bool isAdjacentEmpty(pair<unsigned int, unsigned int> currentTile, Maze& m);
     void clear(); // Resets all data
